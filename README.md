@@ -10,6 +10,13 @@ It started as a fork of an older multi-game Ninja Saga panel. Everything except 
 Not affiliated with NinjaSaga.cc or Ninja Saga. Run it on your own account at your
 own risk.
 
+# Credits
+
+This project is derived from an older multi-game Ninja Saga panel. [Original Repo](https://github.com/AmahLiax/Ninja-Sage-Ninja-Saga-base-game-Panel/)
+Credit and acknowledgment go to the original project author and contributors for their work.
+This version has been modified to focus exclusively on the ninjasaga base game.
+Please refer to the original repository and its license for attribution requirements and applicable terms.
+
 ## Requirements
 
 - Node.js 18 or newer
@@ -49,4 +56,4 @@ If you expose the port, anyone who can reach it can drive the account.
 
 ## Discord
 
-https://discord.gg/yWbbXrAwd
+[Join our Discord](https://discord.gg/yWbbXrAwd)
