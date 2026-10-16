@@ -54,6 +54,6 @@ If you expose the port, anyone who can reach it can drive the account.
   Special Jounin class skill, TP/SS loop counts, and verbose debug logs.
 - Live log stream over WebSocket, with text search, level filters and auto-follow.
 
-## Discord
+## Links
 
-[Join our Discord](https://discord.gg/yWbbXrAwd)
+- GitHub: [isansut](https://github.com/isansut)
