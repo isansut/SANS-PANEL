@@ -6,8 +6,16 @@ import { ssTraining } from './ss.js';
 import { eudemonGarden } from './eudemon.js';
 import { motherdayEvent, sakuraEvent, pumpkinEvent } from './specialEvents.js';
 import { clanWarEvent } from './clanWar.js';
+import { nsoLeveling } from './nsoMission.js';
 
-export function resolveNinjasagaAction(action, params, refreshFactory, currentBaseGame) {
+const NSO_SUPPORTED_ACTIONS = new Set(['leveling', 'refresh', 'bootstrap']);
+
+export function resolveNinjasagaAction(action, params, refreshFactory, currentBaseGame, profileId = null, session = null) {
+  if (profileId === 'nso') {
+    if (action === 'leveling') return { func: () => nsoLeveling(session), name: 'NSO Start Leveling' };
+    if (action === 'refresh' || action === 'bootstrap') return { func: refreshFactory(), name: action === 'refresh' ? 'Refresh Character Info' : 'Bootstrap Session' };
+    throw new Error(`Aksi '${action}' belum didukung untuk NinjaSaga.online (baru: leveling).`);
+  }
   if (action === 'refresh') return { func: refreshFactory(), name: 'Refresh Character Info' };
   if (action === 'bootstrap') return { func: bootstrapSession, name: 'Bootstrap Session' };
   if (action === 'leveling') return { func: ninjasagaLeveling, name: 'Start Leveling' };

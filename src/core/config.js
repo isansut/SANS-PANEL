@@ -27,6 +27,12 @@ export const NINJASAGA_PROFILES = {
     build_num: 'latest',
     clan_url: 'https://ninjasaga.cc/',
   },
+  nso: {
+    label: 'NinjaSaga.online',
+    gateway: 'https://ninjasaga.online/amf',
+    build_num: 'latest',
+    clan_url: 'https://ninjasaga.online/',
+  },
 };
 
 export const GAME_PROFILES = {

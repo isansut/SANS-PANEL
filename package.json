@@ -1,9 +1,9 @@
 {
-  "name": "ninjasaga-cc-panel",
+  "name": "sans-panel",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Standalone NinjaSaga.cc web control panel (Node.js)",
+  "description": "SANS PANEL — web control panel for NinjaSaga.cc & NinjaSaga.online (Node.js)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

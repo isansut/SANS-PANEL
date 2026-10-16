@@ -12,6 +12,7 @@ import { WebSocketServer } from 'ws';
 import config from './src/core/config.js';
 import amfReq from './src/core/amfReq.js';
 import * as ninjasagaAmfReq from './src/core/ninjasaga/amfReq.js';
+import * as nso from './src/core/ninjasaga/nso.js';
 import { SessionManager, getSessionTokens } from './src/core/sessionManager.js';
 import { resolveNinjasagaAction } from './src/core/ninjasaga/actions.js';
 import { buildClanWarSnapshot, clanWarEvent } from './src/core/ninjasaga/clanWar.js';
@@ -282,6 +283,29 @@ async function refreshCharacterDataInner(session, announce = true) {
     if (Array.isArray(charId)) charId = charId.length ? charId[0] : null;
     if (!charId) { session.addLog('❌ No character ID found for refresh', 'error'); return; }
 
+    if (config.getCurrentBaseGame().id === 'ninjasaga' && session.profile_id === 'nso') {
+      if (!session.nso_http || !session.nso_login) { session.addLog('❌ NSO session hilang, login ulang dulu', 'error'); return; }
+      try {
+        const charDataResponse = await nso.nsoGetCharacterData(session.nso_http, charId, session.nso_login.sessionkey);
+        const characterData = (charDataResponse && typeof charDataResponse === 'object' && charDataResponse.character_data)
+          ? charDataResponse.character_data
+          : charDataResponse;
+        if (characterData && typeof characterData === 'object') {
+          session.current_character = characterData;
+          session.character_data = charDataResponse;
+          const characterInfo = buildCharacterInfo(session, characterData);
+          await manager.sendCharacterUpdate(userId, characterInfo);
+          if (!announce) return;
+          session.addLog(`✅ Character refreshed - Lv ${characterInfo.level}, EXP: ${characterInfo.xp}, Gold: ${characterInfo.gold}`, 'success');
+          await manager.sendLog(userId, { timestamp: new Date().toTimeString().slice(0, 8), message: `✅ Character refreshed - Lv ${characterInfo.level}, EXP: ${characterInfo.xp}, Gold: ${characterInfo.gold}`, type: 'success' });
+        } else {
+          session.addLog('❌ Failed to parse NSO character data during refresh', 'error');
+        }
+      } catch (e) {
+        session.addLog(`❌ Error refreshing NSO character data: ${e.message || e}`, 'error');
+      }
+      return;
+    }
     if (config.getCurrentBaseGame().id === 'ninjasaga') {
       try {
         const refreshedCharacters = await amfReq.getAllCharacters();
@@ -686,6 +710,60 @@ app.post('/api/select_amf_profile', (req, res) => {
 
 app.post('/api/check_version', (req, res) => res.json({ success: true, required: false }));
 
+function normalizeNsoCharacters(payload) {
+  if (!payload || typeof payload !== 'object') return [];
+  const raw = Array.isArray(payload.account_data)
+    ? payload.account_data
+    : (Array.isArray(payload.characters) ? payload.characters : []);
+  return raw.map((c, i) => {
+    if (c && typeof c === 'object' && !Array.isArray(c)) {
+      return {
+        character_name: c.character_name ?? c.name ?? `Character ${i + 1}`,
+        character_level: c.character_level ?? c.level ?? 0,
+        character_id: c.character_id ?? c.char_id ?? c.id ?? 0,
+        _nso_raw: c,
+      };
+    }
+    return { character_name: `Character ${i + 1}`, character_level: 0, character_id: c ?? 0 };
+  });
+}
+
+async function finalizeNsoLoginSuccess(requestUsername, requestPassword, nsoLoginData, nsoHttp, ctx) {
+  const userId = crypto.randomUUID();
+  const session = sessions.create(userId, requestUsername, ctx.activeBaseGame, ctx.activeAmfProfile);
+  session.game_context = ctx;
+  session.nso_http = nsoHttp;
+  session.nso_login = { uid: nsoLoginData.uid, sessionkey: nsoLoginData.sessionkey };
+  session.nso_creds = { username: requestUsername, password: requestPassword };
+  session.login_data = nsoLoginData;
+  session.game_data = null;
+
+  const currentAmfProfile = config.getCurrentAmfProfile();
+  const quickLoginStore = config.setQuickLoginCredentials(currentAmfProfile.id, requestUsername, requestPassword, currentAmfProfile.label);
+  session.quick_login_data = quickLoginStore;
+  const storageKey = config.getQuickLoginStorageKey(currentAmfProfile.id, session.base_game_id);
+  saveQuickLoginFile(currentAmfProfile.id, quickLoginStore.profiles[storageKey], session.base_game_id);
+
+  let characters = [];
+  try {
+    const allChar = await nso.nsoGetAllCharacters(nsoHttp, nsoLoginData.uid, nsoLoginData.sessionkey);
+    session.raw_characters_response = allChar;
+    characters = normalizeNsoCharacters(allChar);
+    session.characters = characters;
+  } catch {
+    session.characters = [];
+  }
+
+  session.addLog(`✅ NSO login successful for ${requestUsername} (uid ${nsoLoginData.uid})`, 'success');
+  return {
+    success: true,
+    user_id: userId,
+    username: requestUsername,
+    characters: prepareSerializableCharacters(session.characters),
+    character_count: (session.characters || []).length,
+  };
+}
+
 async function performLogin(body, res) {
   try {
     const baseGameId = body.base_game_id || config.getCurrentBaseGame().id;
@@ -695,6 +773,16 @@ async function performLogin(body, res) {
     catch (exc) { res.json({ success: false, error: exc.message }); return; }
 
     await config.runWithContext(ctx, async () => {
+      if (profileId === 'nso') {
+        try {
+          const nsoHttp = nso.createNsoSession();
+          const nsoLoginData = await nso.nsoLogin(nsoHttp, body.username, body.password);
+          res.json(await finalizeNsoLoginSuccess(body.username, body.password, nsoLoginData, nsoHttp, ctx));
+        } catch (e) {
+          res.json({ success: false, error: e.message || String(e), message: 'NSO login failed' });
+        }
+        return;
+      }
       let buildMarker = '0';
       if (config.gameData) {
         buildMarker = String(config.gameData._ ?? 0);
@@ -725,7 +813,10 @@ app.post('/api/quick_login', async (req, res) => {
     const data = req.body || {};
     const userId = data.user_id;
     const baseGameId = data.base_game_id || config.getCurrentBaseGame().id;
-    const profileId = data.profile_id || config.getCurrentAmfProfile().id;
+    const remembered = (userId && sessions.sessions.get(userId)) || null;
+    const profileId = data.profile_id
+      || (remembered && remembered.profile_id)
+      || config.getCurrentAmfProfile().id;
     const checkOnly = !!data.check_only;
 
     let ctx;
@@ -772,6 +863,22 @@ app.post('/api/select_character', async (req, res) => {
       if (Array.isArray(charId)) charId = charId.length ? charId[0] : null;
       if (!charId) { res.json({ success: false, error: 'Invalid character data - no ID' }); return; }
 
+      if (session.profile_id === 'nso' && session.nso_http && session.nso_login) {
+        try {
+          const charDataResponse = await nso.nsoGetCharacterData(session.nso_http, charId, session.nso_login.sessionkey);
+          const characterData = (charDataResponse && typeof charDataResponse === 'object' && charDataResponse.character_data && typeof charDataResponse.character_data === 'object')
+            ? charDataResponse.character_data
+            : charDataResponse;
+          session.current_character = characterData;
+          session.character_data = charDataResponse;
+          const characterInfo = buildCharacterInfo(session, characterData);
+          session.addLog(`✅ Selected character: ${characterInfo.name}`, 'success');
+          res.json({ success: true, character: characterInfo });
+        } catch (e) {
+          res.json({ success: false, error: e.message || String(e) });
+        }
+        return;
+      }
       const charDataResponse = await amfReq.getCharacterData(charId);
       let characterData = null;
       if (charDataResponse && typeof charDataResponse === 'object') {
@@ -841,6 +948,8 @@ app.post('/api/user/:userId/action', async (req, res) => {
       body.params,
       () => () => refreshCharacterData(session.user_id),
       config.getCurrentBaseGame(),
+      session.profile_id,
+      session,
     ));
   } catch (exc) {
     res.json({ success: false, error: exc.message });
@@ -1121,7 +1230,7 @@ sessions.startCleanupLoop();
 const PORT = Number.parseInt(process.env.PORT || '8000', 10);
 const HOST = process.env.HOST || '127.0.0.1';
 server.listen(PORT, HOST, () => {
-  console.log(`Ninja Sage Web Server (JS) listening on http://${HOST}:${PORT}`);
+  console.log(`SANS PANEL listening on http://${HOST}:${PORT}`);
 });
 
 export { app, server };

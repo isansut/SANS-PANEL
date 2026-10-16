@@ -1,6 +1,6 @@
-# NinjaSaga.cc Panel
+# SANS PANEL
 
-A local web panel for driving one NinjaSaga.cc account. A small Node server talks
+A local web panel for driving one NinjaSaga.cc **or** NinjaSaga.online account. A small Node server talks
 to the game's AMF/HTTP endpoints and exposes them as REST routes plus a WebSocket
 log stream; the UI is a single HTML file.
 

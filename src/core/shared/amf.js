@@ -377,7 +377,7 @@ function amf0WriteShortString(str) {
   return Buffer.concat([header, b]);
 }
 
-function amf0WriteElement(data) {
+function amf0WriteElement(data, objectMode = 'amf3') {
   if (data === null || data === undefined) return Buffer.from([0x05]);
   if (typeof data === 'boolean') return Buffer.from([0x01, data ? 1 : 0]);
   if (typeof data === 'number') {
@@ -401,10 +401,25 @@ function amf0WriteElement(data) {
     const len = Buffer.alloc(4);
     len.writeUInt32BE(data.length);
     parts.push(len);
-    for (const item of data) parts.push(amf0WriteElement(item));
+    for (const item of data) parts.push(amf0WriteElement(item, objectMode));
     return Buffer.concat(parts);
   }
   if (typeof data === 'object') {
+    if (objectMode === 'ecma') {
+      // AMF0 ECMA array: what Flash/ZendAMF clients send for anonymous objects.
+      const parts = [Buffer.from([0x08])];
+      const keys = Object.keys(data);
+      const len = Buffer.alloc(4);
+      len.writeUInt32BE(keys.length);
+      parts.push(len);
+      for (const k of keys) {
+        parts.push(amf0WriteShortString(k));
+        parts.push(amf0WriteElement(data[k], objectMode));
+      }
+      parts.push(amf0WriteShortString(''));
+      parts.push(Buffer.from([0x09]));
+      return Buffer.concat(parts);
+    }
     const writer = new AMF3Writer();
     writer.writeElement(data);
     return Buffer.concat([Buffer.from([0x11]), writer.toBuffer()]);
@@ -424,6 +439,7 @@ function amf0WriteElement(data) {
  */
 export function encodeRequest(method, bodyArray, options = {}) {
   const headers = Array.isArray(options.headers) ? options.headers : [];
+  const objectMode = options.objectMode === 'ecma' ? 'ecma' : 'amf3';
   const parts = [];
   const version = Buffer.alloc(2);
   version.writeUInt16BE(3);
@@ -458,7 +474,7 @@ export function encodeRequest(method, bodyArray, options = {}) {
   const argCount = Buffer.alloc(4);
   argCount.writeUInt32BE(bodyArray.length);
   parts.push(argCount);
-  for (const arg of bodyArray) parts.push(amf0WriteElement(arg));
+  for (const arg of bodyArray) parts.push(amf0WriteElement(arg, objectMode));
 
   return Buffer.concat(parts);
 }
