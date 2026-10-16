@@ -1,0 +1,24 @@
+{
+  "name": "ninjasaga-cc-panel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone NinjaSaga.cc web control panel (Node.js)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "launch": "node launcher.js",
+    "test": "vitest run",
+    "smoke": "node src/core/ninjasaga/smokeTests.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "fetch-cookie": "^3.0.1",
+    "tough-cookie": "^5.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
+}

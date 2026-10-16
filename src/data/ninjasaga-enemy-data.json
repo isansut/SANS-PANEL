@@ -1,0 +1,1376 @@
+{
+  "ene_01": {
+    "id": "ene_01",
+    "name": "Training Dummy",
+    "min_level": 1,
+    "max_level": 1
+  },
+  "ene_02": {
+    "id": "ene_02",
+    "name": "Undead Marionette",
+    "min_level": 6,
+    "max_level": 1
+  },
+  "ene_03": {
+    "id": "ene_03",
+    "name": "Ninja Spy",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_04": {
+    "id": "ene_04",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_05": {
+    "id": "ene_05",
+    "name": "",
+    "min_level": 2,
+    "max_level": 99
+  },
+  "ene_06": {
+    "id": "ene_06",
+    "name": "Striker",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_07": {
+    "id": "ene_07",
+    "name": "Samurai",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_08": {
+    "id": "ene_08",
+    "name": "Ninja Ops",
+    "min_level": 4,
+    "max_level": 99
+  },
+  "ene_09": {
+    "id": "ene_09",
+    "name": "Ninja Assassin",
+    "min_level": 3,
+    "max_level": 99
+  },
+  "ene_10": {
+    "id": "ene_10",
+    "name": "Captain Ninja Pirate",
+    "min_level": 9,
+    "max_level": 99
+  },
+  "ene_11": {
+    "id": "ene_11",
+    "name": "Ninja Pirate",
+    "min_level": 9,
+    "max_level": 99
+  },
+  "ene_12": {
+    "id": "ene_12",
+    "name": "Ninja Pirate",
+    "min_level": 9,
+    "max_level": 99
+  },
+  "ene_13": {
+    "id": "ene_13",
+    "name": "Evil Monk ",
+    "min_level": 7,
+    "max_level": 99
+  },
+  "ene_14": {
+    "id": "ene_14",
+    "name": "Wandering Monk",
+    "min_level": 7,
+    "max_level": 99
+  },
+  "ene_15": {
+    "id": "ene_15",
+    "name": "Wandering Monk",
+    "min_level": 7,
+    "max_level": 99
+  },
+  "ene_16": {
+    "id": "ene_16",
+    "name": "Desert Thief",
+    "min_level": 7,
+    "max_level": 99
+  },
+  "ene_17": {
+    "id": "ene_17",
+    "name": "Desert Bandit",
+    "min_level": 8,
+    "max_level": 99
+  },
+  "ene_18": {
+    "id": "ene_18",
+    "name": "Desert Master Blader",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_19": {
+    "id": "ene_19",
+    "name": "Escaped Bandit Criminal",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_20": {
+    "id": "ene_20",
+    "name": "Escaped Criminal",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_21": {
+    "id": "ene_21",
+    "name": "Escaped Prisoner",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_22": {
+    "id": "ene_22",
+    "name": "Blossom Chunin",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_23": {
+    "id": "ene_23",
+    "name": "Blossom Genin",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_24": {
+    "id": "ene_24",
+    "name": "Blossom Genin",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_25": {
+    "id": "ene_25",
+    "name": "Captain Sailor Extortionist",
+    "min_level": 8,
+    "max_level": 99
+  },
+  "ene_26": {
+    "id": "ene_26",
+    "name": "Sailor Extortionist",
+    "min_level": 8,
+    "max_level": 99
+  },
+  "ene_27": {
+    "id": "ene_27",
+    "name": "Crew Extortionist",
+    "min_level": 8,
+    "max_level": 99
+  },
+  "ene_28": {
+    "id": "ene_28",
+    "name": "Fierce Cat",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_29": {
+    "id": "ene_29",
+    "name": "Water Ninja Genin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_30": {
+    "id": "ene_30",
+    "name": "Water Ninja Genin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_31": {
+    "id": "ene_31",
+    "name": "Toxic Village Bandit",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_32": {
+    "id": "ene_32",
+    "name": "Toxic Village Genin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_33": {
+    "id": "ene_33",
+    "name": "Earth Elite Ninja",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_34": {
+    "id": "ene_34",
+    "name": "Lightning Village Genin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_35": {
+    "id": "ene_35",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_36": {
+    "id": "ene_36",
+    "name": "Fierce Evil Cat",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_37": {
+    "id": "ene_37",
+    "name": "",
+    "min_level": 1,
+    "max_level": 1
+  },
+  "ene_38": {
+    "id": "ene_38",
+    "name": "Ninja Spy Captain",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_39": {
+    "id": "ene_39",
+    "name": "Masked Ninja",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_40": {
+    "id": "ene_40",
+    "name": "Possessed Marionette",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_41": {
+    "id": "ene_41",
+    "name": "Red Bandit Ninja",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_42": {
+    "id": "ene_42",
+    "name": "Scar-Eyed Jounin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_43": {
+    "id": "ene_43",
+    "name": "Mist Stalker",
+    "min_level": 18,
+    "max_level": 99
+  },
+  "ene_44": {
+    "id": "ene_44",
+    "name": "Rain Village Chunin",
+    "min_level": 35,
+    "max_level": 99
+  },
+  "ene_45": {
+    "id": "ene_45",
+    "name": "Kojima",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_46": {
+    "id": "ene_46",
+    "name": "Evil Samurai",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_47": {
+    "id": "ene_47",
+    "name": "Crazy Hooligan",
+    "min_level": 12,
+    "max_level": 99
+  },
+  "ene_48": {
+    "id": "ene_48",
+    "name": "Rebel ninja",
+    "min_level": 12,
+    "max_level": 99
+  },
+  "ene_49": {
+    "id": "ene_49",
+    "name": "Rebel ninja",
+    "min_level": 12,
+    "max_level": 99
+  },
+  "ene_50": {
+    "id": "ene_50",
+    "name": "Rebel Ninja Leader",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_51": {
+    "id": "ene_51",
+    "name": "Fat Hooligan",
+    "min_level": 12,
+    "max_level": 99
+  },
+  "ene_52": {
+    "id": "ene_52",
+    "name": "Soil village Chunin",
+    "min_level": 19,
+    "max_level": 99
+  },
+  "ene_53": {
+    "id": "ene_53",
+    "name": "Soil Ninja Jounin",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_54": {
+    "id": "ene_54",
+    "name": "Soil village Genin",
+    "min_level": 19,
+    "max_level": 99
+  },
+  "ene_55": {
+    "id": "ene_55",
+    "name": "Assassin Leader",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_56": {
+    "id": "ene_56",
+    "name": "Violent Hooligan",
+    "min_level": 15,
+    "max_level": 99
+  },
+  "ene_57": {
+    "id": "ene_57",
+    "name": "Synthetic Marionette",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_58": {
+    "id": "ene_58",
+    "name": "Lightning Village Genin",
+    "min_level": 14,
+    "max_level": 99
+  },
+  "ene_59": {
+    "id": "ene_59",
+    "name": "Kabuto",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_60": {
+    "id": "ene_60",
+    "name": "Iron Arm Hooligan",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_61": {
+    "id": "ene_61",
+    "name": "Takeshi Judo",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_62": {
+    "id": "ene_62",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_63": {
+    "id": "ene_63",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_64": {
+    "id": "ene_64",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_65": {
+    "id": "ene_65",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_66": {
+    "id": "ene_66",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_67": {
+    "id": "ene_67",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_68": {
+    "id": "ene_68",
+    "name": "Kara",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_69": {
+    "id": "ene_69",
+    "name": "Battle Dog",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_70": {
+    "id": "ene_70",
+    "name": "Reindeer",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_71": {
+    "id": "ene_71",
+    "name": "Xmas Thief",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_72": {
+    "id": "ene_72",
+    "name": "Wind Village Genin",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_73": {
+    "id": "ene_73",
+    "name": "Undead Skeleton",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_74": {
+    "id": "ene_74",
+    "name": "Undead Skeleton",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_75": {
+    "id": "ene_75",
+    "name": "Hanjiro",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_76": {
+    "id": "ene_76",
+    "name": "Violent Hooligan Leader",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_77": {
+    "id": "ene_77",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_78": {
+    "id": "ene_78",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_79": {
+    "id": "ene_79",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_80": {
+    "id": "ene_80",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_81": {
+    "id": "ene_81",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_82": {
+    "id": "ene_82",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_83": {
+    "id": "ene_83",
+    "name": "Ginkotsu",
+    "min_level": 10,
+    "max_level": 99
+  },
+  "ene_84": {
+    "id": "ene_84",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_85": {
+    "id": "ene_85",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_86": {
+    "id": "ene_86",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_87": {
+    "id": "ene_87",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_88": {
+    "id": "ene_88",
+    "name": "Byakko",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_89": {
+    "id": "ene_89",
+    "name": "Tengu",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_90": {
+    "id": "ene_90",
+    "name": "Tengu - Wind",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_91": {
+    "id": "ene_91",
+    "name": "Shikigami YanKi",
+    "min_level": 20,
+    "max_level": 99
+  },
+  "ene_92": {
+    "id": "ene_92",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_93": {
+    "id": "ene_93",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_94": {
+    "id": "ene_94",
+    "name": "Gedo Sessho Seki",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_95": {
+    "id": "ene_95",
+    "name": "Sen Ryo",
+    "min_level": 40,
+    "max_level": 99
+  },
+  "ene_96": {
+    "id": "ene_96",
+    "name": "Kiyoshi",
+    "min_level": 40,
+    "max_level": 99
+  },
+  "ene_97": {
+    "id": "ene_97",
+    "name": "Takeshi",
+    "min_level": 40,
+    "max_level": 99
+  },
+  "ene_98": {
+    "id": "ene_98",
+    "name": "Elementman",
+    "min_level": 40,
+    "max_level": 99
+  },
+  "ene_99": {
+    "id": "ene_99",
+    "name": "",
+    "min_level": 60,
+    "max_level": 99
+  },
+  "ene_100": {
+    "id": "ene_100",
+    "name": "",
+    "min_level": 60,
+    "max_level": 99
+  },
+  "ene_101": {
+    "id": "ene_101",
+    "name": "",
+    "min_level": 60,
+    "max_level": 99
+  },
+  "ene_102": {
+    "id": "ene_102",
+    "name": "Giant Dummy",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_103": {
+    "id": "ene_103",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_104": {
+    "id": "ene_104",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_105": {
+    "id": "ene_105",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_106": {
+    "id": "ene_106",
+    "name": "Ape King",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_117": {
+    "id": "ene_117",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_118": {
+    "id": "ene_118",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_119": {
+    "id": "ene_119",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_120": {
+    "id": "ene_120",
+    "name": "Battle Turtle",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_143": {
+    "id": "ene_143",
+    "name": "Anarki",
+    "min_level": 99,
+    "max_level": 99
+  },
+  "ene_144": {
+    "id": "ene_144",
+    "name": "Undead Puppet",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_145": {
+    "id": "ene_145",
+    "name": "Undead Puppet",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_146": {
+    "id": "ene_146",
+    "name": "",
+    "min_level": 99,
+    "max_level": 99
+  },
+  "ene_147": {
+    "id": "ene_147",
+    "name": "",
+    "min_level": 99,
+    "max_level": 99
+  },
+  "ene_150": {
+    "id": "ene_150",
+    "name": "Xmas Thief",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_151": {
+    "id": "ene_151",
+    "name": "Naughty Elf",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_152": {
+    "id": "ene_152",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_153": {
+    "id": "ene_153",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_154": {
+    "id": "ene_154",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_155": {
+    "id": "ene_155",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_156": {
+    "id": "ene_156",
+    "name": "Ryu",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_157": {
+    "id": "ene_157",
+    "name": "Irata & Aoi & Kenta",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_158": {
+    "id": "ene_158",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_159": {
+    "id": "ene_159",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_160": {
+    "id": "ene_160",
+    "name": "Easter Egg Thief",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_161": {
+    "id": "ene_161",
+    "name": "Easter Egg Bandit",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_162": {
+    "id": "ene_162",
+    "name": "Egg Thief Chunin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_163": {
+    "id": "ene_163",
+    "name": "Egg Thief Chunin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_164": {
+    "id": "ene_164",
+    "name": "Egg Thief Chunin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_165": {
+    "id": "ene_165",
+    "name": "Easter Egg Thief",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_166": {
+    "id": "ene_166",
+    "name": "Egg Thief Master Blader",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_167": {
+    "id": "ene_167",
+    "name": "Egg Thief Chunin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_168": {
+    "id": "ene_168",
+    "name": "Egg Thief Jounin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_169": {
+    "id": "ene_169",
+    "name": "Easter Egg Samurai",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_170": {
+    "id": "ene_170",
+    "name": "Egg Thief Fanatics",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_171": {
+    "id": "ene_171",
+    "name": "Egg Thief Killer",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_172": {
+    "id": "ene_172",
+    "name": "Kogoemon",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_173": {
+    "id": "ene_173",
+    "name": "Yimoku Ateru",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_174": {
+    "id": "ene_174",
+    "name": "Kakushi Toridetoko",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_175": {
+    "id": "ene_175",
+    "name": "Soul of Kosenjo",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_176": {
+    "id": "ene_176",
+    "name": "Shinoshino Maru",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_177": {
+    "id": "ene_177",
+    "name": "Pentameter Hornbill",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_178": {
+    "id": "ene_178",
+    "name": "Usagi Daizaburo",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_179": {
+    "id": "ene_179",
+    "name": "Clone of Shin",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_180": {
+    "id": "ene_180",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_181": {
+    "id": "ene_181",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_182": {
+    "id": "ene_182",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_183": {
+    "id": "ene_183",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_184": {
+    "id": "ene_184",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_185": {
+    "id": "ene_185",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_186": {
+    "id": "ene_186",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_187": {
+    "id": "ene_187",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_188": {
+    "id": "ene_188",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_189": {
+    "id": "ene_189",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_121": {
+    "id": "ene_121",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_122": {
+    "id": "ene_122",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_123": {
+    "id": "ene_123",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_107": {
+    "id": "ene_107",
+    "name": "Desert Fanatics",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_108": {
+    "id": "ene_108",
+    "name": "Desert Swords Master",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_109": {
+    "id": "ene_109",
+    "name": "Desert Killer",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_110": {
+    "id": "ene_110",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_111": {
+    "id": "ene_111",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_112": {
+    "id": "ene_112",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_140": {
+    "id": "ene_140",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_141": {
+    "id": "ene_141",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_142": {
+    "id": "ene_142",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_114": {
+    "id": "ene_114",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_115": {
+    "id": "ene_115",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_113": {
+    "id": "ene_113",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_134": {
+    "id": "ene_134",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_135": {
+    "id": "ene_135",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_136": {
+    "id": "ene_136",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_131": {
+    "id": "ene_131",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_132": {
+    "id": "ene_132",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_133": {
+    "id": "ene_133",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_137": {
+    "id": "ene_137",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_138": {
+    "id": "ene_138",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_139": {
+    "id": "ene_139",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_148": {
+    "id": "ene_148",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_149": {
+    "id": "ene_149",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_125": {
+    "id": "ene_125",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_126": {
+    "id": "ene_126",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_127": {
+    "id": "ene_127",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_128": {
+    "id": "ene_128",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_129": {
+    "id": "ene_129",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_130": {
+    "id": "ene_130",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_191": {
+    "id": "ene_191",
+    "name": "",
+    "min_level": 5,
+    "max_level": 99
+  },
+  "ene_190": {
+    "id": "ene_190",
+    "name": "Shikigami Dori",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_192": {
+    "id": "ene_192",
+    "name": "Pumpkin Kurosuke",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_193": {
+    "id": "ene_193",
+    "name": "Yukidaruma",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_256": {
+    "id": "ene_256",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_257": {
+    "id": "ene_257",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_258": {
+    "id": "ene_258",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_259": {
+    "id": "ene_259",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_260": {
+    "id": "ene_260",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_261": {
+    "id": "ene_261",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_262": {
+    "id": "ene_262",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_263": {
+    "id": "ene_263",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_264": {
+    "id": "ene_264",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_265": {
+    "id": "ene_265",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_266": {
+    "id": "ene_266",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_267": {
+    "id": "ene_267",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_268": {
+    "id": "ene_268",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_269": {
+    "id": "ene_269",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_270": {
+    "id": "ene_270",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_271": {
+    "id": "ene_271",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_272": {
+    "id": "ene_272",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_273": {
+    "id": "ene_273",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_274": {
+    "id": "ene_274",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_345": {
+    "id": "ene_345",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_346": {
+    "id": "ene_346",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_347": {
+    "id": "ene_347",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_348": {
+    "id": "ene_348",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_349": {
+    "id": "ene_349",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_350": {
+    "id": "ene_350",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_351": {
+    "id": "ene_351",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_352": {
+    "id": "ene_352",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_353": {
+    "id": "ene_353",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_354": {
+    "id": "ene_354",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_355": {
+    "id": "ene_355",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_356": {
+    "id": "ene_356",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_357": {
+    "id": "ene_357",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_358": {
+    "id": "ene_358",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_359": {
+    "id": "ene_359",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_360": {
+    "id": "ene_360",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_361": {
+    "id": "ene_361",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_362": {
+    "id": "ene_362",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  },
+  "ene_363": {
+    "id": "ene_363",
+    "name": "",
+    "min_level": 1,
+    "max_level": 99
+  }
+}

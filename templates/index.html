@@ -1,0 +1,1459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NinjaSaga.cc Panel</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0e1116;
+    --bg-2: #151a21;
+    --card: #1a2029;
+    --card-2: #212834;
+    --line: #2c3644;
+    --text: #e6eaf0;
+    --muted: #a6b4c4;
+    --muted-2: #8d9cae;
+    --accent: #ff7a1a;
+    --accent-2: #ffa04d;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 14.5px/1.55 "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+  a { color: var(--accent-2); }
+  .hidden { display: none !important; }
+  ::selection { background: rgba(255, 122, 26, .3); }
+  * { scrollbar-width: thin; scrollbar-color: #34414f transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb { background: #34414f; border: 3px solid var(--bg); border-radius: 8px; }
+  *::-webkit-scrollbar-thumb:hover { background: #43525f; }
+  .btn:focus-visible, .action-tile:focus-visible, .seg-btn:focus-visible, summary:focus-visible {
+    outline: 2px solid rgba(255, 122, 26, .65); outline-offset: 2px;
+  }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .brand { font-size: 15px; font-weight: 700; letter-spacing: .2px; }
+  .brand span { color: var(--accent); }
+  .conn { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12.5px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+  .dot.on { background: var(--green); }
+  .char-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .discord-link { grid-column: span 2; }
+  .discord-link svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+  @media (max-width: 380px) { .discord-link { grid-column: 1 / -1; } }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+
+  /* Auth screens: the login card and its Discord button share one width */
+  .auth-col { width: 100%; max-width: 440px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 16px; }
+  .card h2 + .hint { margin-bottom: 14px; }
+  .hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 900px) {
+    .grid.two { grid-template-columns: 340px 1fr; }
+    .grid.settings { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
+  input, select, textarea {
+    width: 100%;
+    background: var(--bg-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font: inherit;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  input[type="checkbox"] { width: auto; }
+  select option { background: var(--card); color: var(--text); }
+  input:disabled, select:disabled, textarea:disabled {
+    color: var(--text);
+    -webkit-text-fill-color: var(--text);
+    background: #10151b;
+    opacity: .85;
+    cursor: not-allowed;
+  }
+  .field { margin-bottom: 12px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row > * { flex: 1 1 140px; }
+  .check { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 13px; }
+  .check input { margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    background: var(--card-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font: inherit; font-weight: 600;
+    cursor: pointer;
+    transition: .15s;
+  }
+  .btn:hover:not(:disabled) { border-color: var(--accent); color: #fff; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #12161c; }
+  .btn.primary:hover:not(:disabled) { color: #12161c; filter: brightness(1.06); }
+  .btn.danger { border-color: #6b2b28; color: #ffb3ae; }
+  .btn.danger:hover:not(:disabled) { border-color: var(--red); color: #fff; background: #3a1d1b; }
+  .btn.ghost { background: transparent; }
+  .btn.ghost.active { color: var(--green); border-color: #24512c; background: #12200f; }
+  .btn.sm { padding: 6px 11px; font-size: 12.5px; }
+  .btn.block { width: 100%; }
+
+  .actions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .action-tile {
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--card-2);
+    color: var(--text);
+    font: inherit;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: .15s;
+  }
+  .action-tile:hover:not(:disabled) { border-color: var(--accent); }
+  .action-tile:disabled { opacity: .45; cursor: not-allowed; }
+  .action-tile .t { font-weight: 700; font-size: 14px; }
+  .action-tile .d { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  .char-head { display: flex; align-items: center; gap: 14px; }
+  .avatar {
+    width: 52px; height: 52px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800;
+    background: var(--card-2);
+    border: 1px solid var(--line);
+    color: var(--accent-2);
+  }
+  .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+  .stat { background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
+  .stat .k { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; font-weight: 600; }
+  .stat .v { font-size: 17px; font-weight: 700; margin-top: 2px; }
+  .stat.wide { grid-column: 1 / -1; }
+  .stat .sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .stat .sub.warn { color: var(--yellow); }
+  .stat.rank-genin .v { color: #7ee787; }
+  .stat.rank-chunin .v { color: var(--blue); }
+  .stat.rank-jounin .v { color: #d2a8ff; }
+  .stat.rank-special .v { color: var(--accent-2); }
+  .stat.rank-tutor .v { color: #ffd479; }
+  .badge { display: inline-block; font-size: 12px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--line); color: var(--text); background: var(--bg-2); }
+  .badge.premium { color: var(--accent-2); border-color: #6b3f1a; background: #2a1c0f; }
+  .badge.running { color: var(--green); border-color: #24512c; background: #12200f; }
+
+  /* ---- live log ---- */
+  .log-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+  .log-head h2 { margin: 0; }
+  .log-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .log-counts { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .log-counts .err { color: var(--red); font-weight: 700; }
+  .log-counts .warn { color: var(--yellow); font-weight: 700; }
+  .log-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .log-search { width: 190px; padding: 6px 10px; font-size: 12.5px; }
+
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg-btn {
+    background: transparent; border: 0; border-right: 1px solid var(--line);
+    color: var(--muted); font: inherit; font-size: 12px; font-weight: 600;
+    padding: 6px 10px; cursor: pointer;
+  }
+  .seg-btn:last-child { border-right: 0; }
+  .seg-btn:hover { background: var(--card-2); color: var(--text); }
+  .seg-btn.active { background: var(--accent); color: #201305; }
+
+  .log-wrap { position: relative; margin-top: 12px; }
+  .log {
+    background: #080b0f;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    height: 420px;
+    overflow-y: auto;
+    padding: 8px;
+    font: 12.5px/1.55 "Cascadia Code", Consolas, "Courier New", monospace;
+    scrollbar-width: thin;
+    scrollbar-color: #34414f transparent;
+  }
+  .log::-webkit-scrollbar { width: 10px; }
+  .log::-webkit-scrollbar-track { background: transparent; }
+  .log::-webkit-scrollbar-thumb { background: #34414f; border: 3px solid #080b0f; border-radius: 8px; }
+
+  .log-line {
+    display: grid;
+    grid-template-columns: 62px 18px minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+    padding: 3px 8px;
+    border-radius: 7px;
+    border-left: 3px solid transparent;
+    color: #ccd5e0;
+  }
+  .log-line:hover { background: rgba(255, 255, 255, .04); }
+  .log-line .ts { color: var(--muted-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .log-line .log-ico { text-align: center; }
+  .log-line .log-msg { white-space: pre-wrap; word-break: break-word; min-width: 0; }
+
+  .log-line.success { color: #7ee787; border-left-color: rgba(63, 185, 80, .45); }
+  .log-line.warning { color: #e3b341; border-left-color: rgba(210, 153, 34, .45); }
+  .log-line.error   { color: #ff8b82; border-left-color: rgba(248, 81, 73, .55); background: rgba(248, 81, 73, .07); }
+  .log-line.error:hover { background: rgba(248, 81, 73, .12); }
+
+  .log-tag {
+    display: inline-block; margin-right: 7px; padding: 0 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: .3px;
+    color: var(--accent-2); background: #33210f;
+    border: 1px solid #6b3f1a; border-radius: 5px;
+    vertical-align: 1px;
+  }
+  .log-tag.exam { color: var(--blue); background: #0f2033; border-color: #1f4a70; }
+  .log-tag.training { color: #7ee787; background: #10240f; border-color: #24512c; }
+  .log-tag.war { color: #d2a8ff; background: #241033; border-color: #5a2f80; }
+
+  .log-seg {
+    display: inline-block; margin: 1px 4px 1px 0; padding: 0 6px;
+    font-size: 12px; color: var(--text);
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 5px;
+  }
+
+  .log-line.cycle {
+    display: block; margin: 8px 0 2px; padding: 5px 10px;
+    border: 1px solid #56361a; border-radius: 6px;
+    background: rgba(255, 122, 26, .08);
+    color: var(--accent-2); font-weight: 700;
+  }
+  .log-line.cycle .ts { color: var(--muted); }
+
+  .log-jump {
+    position: absolute; right: 20px; bottom: 20px;
+    padding: 6px 12px; border: 0; border-radius: 6px;
+    background: var(--accent); color: #201305;
+    font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .4);
+  }
+  .log-jump:hover { background: var(--accent-2); }
+
+  .char-list { display: flex; flex-direction: column; gap: 10px; }
+  .char-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--card-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px;
+  }
+  .char-item .meta { display: flex; align-items: center; gap: 12px; }
+
+  .modal {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(0,0,0,.6);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 16px; overflow-y: auto;
+  }
+  .modal .dialog {
+    width: 100%; max-width: 760px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 20px;
+  }
+  .modal .dialog header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .modal .dialog header h2 { margin: 0; font-size: 16px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
+  tbody tr:hover { background: var(--bg-2); }
+  .clan-pick { cursor: pointer; }
+  .clan-pick.sel { background: #2a1c0f; }
+
+  #toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--card-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 16px; z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,.35);
+    opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw;
+  }
+  #toast.show { opacity: 1; }
+  #toast.error { border-color: var(--red); }
+  #toast.success { border-color: var(--green); }
+
+  .busy {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(8,10,14,.72);
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px;
+  }
+  .spinner {
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 4px solid rgba(255,255,255,.14);
+    border-top-color: var(--accent);
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .busy .msg { color: var(--text); font-weight: 600; }
+
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .tab {
+    background: none; border: none; color: var(--muted);
+    padding: 9px 14px; font: inherit; font-weight: 600; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .tabpanel { display: flex; flex-direction: column; gap: 16px; }
+  .subhead { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 6px 0 10px; }
+  .event-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; margin-top: 10px; }
+  @media (max-width: 560px) { .event-row { grid-template-columns: 1fr; } }
+  details.card > summary { cursor: pointer; font-weight: 700; list-style: none; }
+  details.card > summary::-webkit-details-marker { display: none; }
+  details.card > summary::after { content: "▾"; float: right; color: var(--muted); }
+  details.card[open] > summary::after { content: "▴"; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="ic-discord" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<header class="topbar">
+  <div class="brand">Ninja<span>Saga</span>.cc Panel</div>
+  <div class="conn"><span id="wsDot" class="dot"></span><span id="wsText">offline</span></div>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <section id="loginView" class="card auth-col" style="margin:20px auto;">
+    <h2>Login</h2>
+    <div class="hint">Sign in with your NinjaSaga.cc account.</div>
+    <div class="field"><label for="username">Username</label><input id="username" autocomplete="username" /></div>
+    <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" /></div>
+    <button id="loginBtn" class="btn primary block">Login</button>
+    <div id="quickLoginWrap" class="hidden" style="margin-top:12px;">
+      <button id="quickLoginBtn" class="btn block">Quick Login (remembered account)</button>
+      <div class="hint" style="margin-top:6px;">Previously signed in on this browser.</div>
+    </div>
+  </section>
+
+  <div id="loginDiscordWrap" class="auth-col" style="margin:0 auto;">
+    <a class="btn block discord-link" href="https://discord.gg/yWbbXrAwd" target="_blank" rel="noopener noreferrer" title="Join the community Discord">
+      <svg aria-hidden="true"><use href="#ic-discord"/></svg>
+      <span>Join our Discord</span>
+    </a>
+  </div>
+
+  <!-- CHARACTER SELECT -->
+  <section id="charView" class="card hidden" style="max-width:560px;margin:20px auto;">
+    <h2>Select Character</h2>
+    <div class="hint">Choose which ninja to control.</div>
+    <div id="charList" class="char-list" style="margin-top:12px;"></div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashView" class="hidden tabpanel">
+    <div class="grid two">
+      <div class="card">
+        <div class="char-head">
+          <div class="avatar" id="charAvatar">N</div>
+          <div>
+            <div style="font-size:17px;font-weight:800;" id="charName">—</div>
+            <div style="margin-top:4px;">
+              <span class="badge" id="charType">—</span>
+              <span class="badge" id="charState">Idle</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat wide" id="statRankCard">
+            <div class="k">Rank</div>
+            <div class="v" id="statRank">—</div>
+            <div class="sub" id="statRankNote"></div>
+          </div>
+          <div class="stat"><div class="k">Level</div><div class="v" id="statLevel">—</div></div>
+          <div class="stat"><div class="k">Tokens</div><div class="v" id="statTokens">—</div></div>
+          <div class="stat"><div class="k">EXP</div><div class="v" id="statXp">—</div></div>
+          <div class="stat"><div class="k">Gold</div><div class="v" id="statGold">—</div></div>
+        </div>
+        <div class="char-actions">
+          <button id="refreshBtn" class="btn sm">Refresh</button>
+          <button id="switchCharBtn" class="btn sm">Change Character</button>
+          <button id="settingsToggle" class="btn sm">Settings</button>
+          <button id="logoutBtn" class="btn sm danger">Logout</button>
+          <a class="btn discord-link" href="https://discord.gg/yWbbXrAwd" target="_blank" rel="noopener noreferrer" title="Join the community Discord">
+            <svg aria-hidden="true"><use href="#ic-discord"/></svg>
+            <span>Join our Discord</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Actions</h2>
+        <div class="hint">Pick an automation task. Only one runs at a time.</div>
+
+        <div class="subhead" style="margin-top:16px;">Automation</div>
+        <div class="actions-grid">
+          <button class="action-tile act" data-action="leveling"><span class="t">Start Leveling</span><span class="d">Grind missions, exams &amp; level caps</span></button>
+          <button class="action-tile act" data-action="tp_training"><span class="t">TP Training</span><span class="d">Training points missions</span></button>
+          <button class="action-tile act" data-action="ss_training"><span class="t">SS Training</span><span class="d">Sword training missions</span></button>
+          <button class="action-tile act" data-action="eudemon_garden"><span class="t">Eudemon Garden</span><span class="d">Auto-battle garden rooms</span></button>
+          <button class="action-tile act" data-action="motherday_event"><span class="t">Mother Day Event</span><span class="d">Daily special battle</span></button>
+          <button class="action-tile act" data-action="bootstrap"><span class="t">Bootstrap Session</span><span class="d">Re-load game data</span></button>
+        </div>
+
+        <div class="subhead" style="margin-top:18px;">Special Events</div>
+        <div class="event-row">
+          <div class="field" style="margin:0;">
+            <label for="sakuraEnemy">Sakura Festival target</label>
+            <select id="sakuraEnemy"></select>
+          </div>
+          <button class="btn act" data-action="sakura_event" data-param="sakuraEnemy">Run Sakura</button>
+        </div>
+        <div class="event-row">
+          <div class="field" style="margin:0;">
+            <label for="pumpkinEnemy">Halloween Pumpkin target</label>
+            <select id="pumpkinEnemy"></select>
+          </div>
+          <button class="btn act" data-action="pumpkin_event" data-param="pumpkinEnemy">Run Halloween</button>
+        </div>
+
+        <div class="row" style="margin-top:18px;">
+          <button id="clanWarBtn" class="btn">Clan War</button>
+          <button id="stopBtn" class="btn danger" disabled>Stop</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <section id="settingsView" class="card hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><h2>Settings</h2><div class="hint">Saved globally for NinjaSaga.cc. Applies to new action runs.</div></div>
+        <button id="settingsClose" class="btn sm ghost">Close</button>
+      </div>
+
+      <div class="grid settings" style="margin-top:14px;">
+        <div>
+          <div class="subhead">Anti-detection / delays</div>
+          <div class="hint" style="margin:-4px 0 10px;">Every wait also gets a small built-in random margin (about 0.4&ndash;3&nbsp;s) that is not configurable &mdash; so timings stay unpredictable even if you set the jitter to 0.</div>
+          <div class="row">
+            <div class="field"><label for="adp_action_delay_seconds">Action delay (s)</label><input id="adp_action_delay_seconds" type="number" min="0" /></div>
+            <div class="field"><label for="adp_cycle_cooldown_seconds">Cycle cooldown (s)</label><input id="adp_cycle_cooldown_seconds" type="number" min="0" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="adp_rest_every_cycles">Rest every N cycles</label><input id="adp_rest_every_cycles" type="number" min="0" /></div>
+            <div class="field"><label for="adp_rest_duration_seconds">Rest duration (s)</label><input id="adp_rest_duration_seconds" type="number" min="0" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="adp_action_jitter_seconds">Action jitter (s)</label><input id="adp_action_jitter_seconds" type="number" min="0" /></div>
+            <div class="field"><label for="adp_min_call_delay_seconds">Min call delay (s)</label><input id="adp_min_call_delay_seconds" type="number" min="0" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="adp_start_retry_delay_seconds">Start retry delay (s)</label><input id="adp_start_retry_delay_seconds" type="number" min="1" /></div>
+            <div class="field"><label for="adp_start_max_retries">Start max retries</label><input id="adp_start_max_retries" type="number" min="1" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="adp_cloudflare_rest_seconds">Cloudflare rest (s)</label><input id="adp_cloudflare_rest_seconds" type="number" min="1" /></div>
+            <div class="field"><label for="adp_cloudflare_backoff_max_seconds">Backoff max (s)</label><input id="adp_cloudflare_backoff_max_seconds" type="number" min="1" /></div>
+          </div>
+          <div class="field"><label for="adp_cloudflare_backoff_steps_seconds">Backoff steps (comma-separated seconds)</label><input id="adp_cloudflare_backoff_steps_seconds" placeholder="60,120,240" /></div>
+          <div class="row">
+            <div class="field"><label for="adp_failure_window_seconds">Failure window (s)</label><input id="adp_failure_window_seconds" type="number" min="1" /></div>
+            <div class="field"><label for="adp_max_failures_in_window">Max failures in window</label><input id="adp_max_failures_in_window" type="number" min="1" /></div>
+          </div>
+          <div class="field"><label for="adp_circuit_cooldown_seconds">Circuit cooldown (s)</label><input id="adp_circuit_cooldown_seconds" type="number" min="1" /></div>
+        </div>
+
+        <div>
+          <div class="subhead">Auto spend</div>
+          <div class="field check"><input id="asp_enabled" type="checkbox" /><label for="asp_enabled" style="margin:0;">Enable automatic energy refill</label></div>
+          <div class="field"><label for="asp_max_refills_per_run">Max refills per run</label><input id="asp_max_refills_per_run" type="number" min="0" /></div>
+
+          <div class="subhead" style="margin-top:18px;">Event resources &amp; timing</div>
+          <div class="row">
+            <div class="field"><label for="erp_mode">When out of event resource</label>
+              <select id="erp_mode"><option value="buy">Buy</option><option value="wait">Wait</option><option value="stop">Stop</option></select>
+            </div>
+            <div class="field"><label for="erp_wait_minutes">Wait minutes</label><input id="erp_wait_minutes" type="number" min="0" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="et_sakura_battle_delay_seconds">Sakura battle delay (s)</label><input id="et_sakura_battle_delay_seconds" type="number" min="1" /></div>
+            <div class="field"><label for="et_pumpkin_battle_delay_seconds">Pumpkin battle delay (s)</label><input id="et_pumpkin_battle_delay_seconds" type="number" min="1" /></div>
+          </div>
+
+          <div class="subhead" style="margin-top:18px;">Promotion &amp; training</div>
+          <div class="field"><label for="special_jounin_class_index">Special Jounin class skill</label>
+            <select id="special_jounin_class_index">
+              <option value="1">Intelligence Class</option>
+              <option value="2">Surprise Attack Class</option>
+              <option value="3">Sensor Class</option>
+              <option value="4">Heavy Attack Class</option>
+              <option value="5">Medical Class</option>
+            </select>
+          </div>
+          <div class="row">
+            <div class="field"><label for="tp_training_abuse_loop">TP training loop count</label><input id="tp_training_abuse_loop" type="number" min="1" /></div>
+            <div class="field"><label for="ss_training_abuse_loop">SS training loop count</label><input id="ss_training_abuse_loop" type="number" min="1" /></div>
+          </div>
+          <div class="field"><label>Exam mode</label><input id="exam_mode" value="hard" disabled /></div>
+          <div class="field check"><input id="debug_enabled" type="checkbox" /><label for="debug_enabled" style="margin:0;">Verbose NinjaSaga debug logs</label></div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:16px;">
+        <button id="saveSettings" class="btn primary">Save Settings</button>
+        <button id="resetSettings" class="btn danger">Reset Defaults</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- LOGS -->
+  <section id="logCard" class="card hidden">
+    <div class="log-head">
+      <div class="log-title">
+        <h2>Live Log</h2>
+        <span id="logCounts" class="log-counts"></span>
+      </div>
+      <div class="log-tools">
+        <input id="logSearch" class="log-search" type="search" placeholder="Filter text…" />
+        <div class="seg" id="logFilters">
+          <button class="seg-btn active" data-filter="all">All</button>
+          <button class="seg-btn" data-filter="info">Info</button>
+          <button class="seg-btn" data-filter="success">OK</button>
+          <button class="seg-btn" data-filter="warning">Warn</button>
+          <button class="seg-btn" data-filter="error">Error</button>
+          <button class="seg-btn" data-filter="cycle">Cycles</button>
+        </div>
+        <button id="logFollowBtn" class="btn sm ghost active">Follow</button>
+        <button id="clearLogsBtn" class="btn sm ghost">Clear</button>
+      </div>
+    </div>
+    <div class="log-wrap">
+      <div id="log" class="log"></div>
+      <button id="logJumpBtn" class="log-jump hidden">Jump to latest</button>
+    </div>
+  </section>
+</main>
+
+<!-- CLAN WAR MODAL -->
+<div id="clanModal" class="modal hidden">
+  <div class="dialog">
+    <header>
+      <h2>Clan War</h2>
+      <button id="clanClose" class="btn sm ghost">Close</button>
+    </header>
+
+    <div id="clanStatus" class="hint">Load the war list to begin.</div>
+
+    <div class="row" style="margin-top:12px;">
+      <button id="clanOpenBtn" class="btn">Load War List</button>
+      <div class="field" style="margin:0;"><label for="clanSearch">Filter clans</label><input id="clanSearch" placeholder="name or id" /></div>
+    </div>
+
+    <div style="max-height:220px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:8px;">
+      <table>
+        <thead><tr><th>Clan</th><th>ID</th><th>Rep</th><th>Master</th><th>Members</th></tr></thead>
+        <tbody id="clanTableBody"><tr><td colspan="5" class="hint">No war list loaded.</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="grid settings" style="margin-top:14px;">
+      <div>
+        <div class="subhead">Target</div>
+        <div class="field"><label for="clanTargetId">Target clan ID</label><input id="clanTargetId" placeholder="selected from list" /></div>
+        <div class="field"><label for="clanTargetName">Target clan name</label><input id="clanTargetName" /></div>
+        <div class="field"><label for="clanRefillSource">Stamina refill source</label>
+          <select id="clanRefillSource"><option value="auto">Auto</option><option value="token">Token</option><option value="roll">Roll</option></select>
+        </div>
+        <div class="field check"><input id="clanAutoSpend" type="checkbox" /><label for="clanAutoSpend" style="margin:0;">Auto refill stamina</label></div>
+        <div class="field check"><input id="clanBleeding" type="checkbox" /><label for="clanBleeding" style="margin:0;">Bleeding mode</label></div>
+        <div class="field check"><input id="clanManualRecruit" type="checkbox" /><label for="clanManualRecruit" style="margin:0;">Manual recruiter selection</label></div>
+        <div class="field"><label for="clanManualIds">Recruiter IDs (comma-separated, max 2)</label><input id="clanManualIds" /></div>
+      </div>
+      <div>
+        <div class="subhead">Delays</div>
+        <div class="field"><label for="cw_battle_delay_seconds">Battle delay (s)</label><input id="cw_battle_delay_seconds" type="number" min="1" /></div>
+        <div class="field"><label for="cw_refresh_delay_seconds">Refresh delay (s)</label><input id="cw_refresh_delay_seconds" type="number" min="1" /></div>
+        <div class="field"><label for="cw_buy_stamina_delay_seconds">Buy stamina delay (s)</label><input id="cw_buy_stamina_delay_seconds" type="number" min="1" /></div>
+        <div class="field"><label for="cw_amf_call_delay_seconds">AMF call delay (s)</label><input id="cw_amf_call_delay_seconds" type="number" min="0" /></div>
+        <div class="field"><label for="cw_post_captcha_resume_delay_seconds">Post-captcha resume delay (s)</label><input id="cw_post_captcha_resume_delay_seconds" type="number" min="0" /></div>
+      </div>
+    </div>
+
+    <div id="clanCaptcha" class="hidden" style="margin-top:14px;border:1px solid var(--yellow);border-radius:8px;padding:12px;background:#241f10;">
+      <div style="font-weight:700;color:var(--yellow);">Captcha required</div>
+      <div class="hint" id="clanCaptchaMsg">Solve the captcha in-game, then resume.</div>
+      <div class="row" style="margin-top:10px;">
+        <button id="clanCaptchaChallenge" class="btn sm">Load Puzzle</button>
+        <button id="clanCaptchaResume" class="btn sm primary">Mark Solved &amp; Resume</button>
+      </div>
+      <div id="clanCaptchaChallengeBox" class="hidden" style="margin-top:10px;">
+        <div class="field"><label for="captchaAnswer">Answer</label><input id="captchaAnswer" /></div>
+        <div class="field"><label for="captchaHmac">HMAC</label><input id="captchaHmac" /></div>
+        <div class="field"><label for="captchaId">Challenge ID</label><input id="captchaId" /></div>
+        <button id="clanCaptchaVerify" class="btn sm">Verify</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:14px;">
+      <button id="clanSave" class="btn">Save Config</button>
+      <button id="clanStart" class="btn primary">Start</button>
+      <button id="clanStop" class="btn danger">Stop</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="busy" class="busy hidden">
+  <div class="spinner"></div>
+  <div class="msg" id="busyMsg">Working…</div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const SAKURA_ENEMIES = {
+    enemy289: 'Origami Deer', enemy290: 'Origami Crane', enemy291: 'Origami Dragon',
+    enemy292: 'Origami Bear', enemy393: 'Origami Devil Spider'
+  };
+  const PUMPKIN_ENEMIES = {
+    enemy534: 'Furious Zombie', enemy535: 'White Werewolf', enemy536: 'Captain Skeleton',
+    enemy537: 'Golden Joker', enemy538: 'Geisha Ghost'
+  };
+
+  const ADP_FIELDS = [
+    'action_delay_seconds', 'cycle_cooldown_seconds', 'rest_every_cycles', 'rest_duration_seconds',
+    'action_jitter_seconds', 'min_call_delay_seconds', 'start_retry_delay_seconds', 'start_max_retries',
+    'cloudflare_rest_seconds', 'cloudflare_backoff_max_seconds', 'failure_window_seconds',
+    'max_failures_in_window', 'circuit_cooldown_seconds'
+  ];
+
+  const state = {
+    userId: null,
+    username: null,
+    character: null,
+    characters: [],
+    running: false,
+    currentAction: null,
+    ws: null,
+    settingsOpen: false,
+    clan: { settings: {}, snapshot: null, selectedId: '' },
+    clanPollTimer: null,
+    logEntries: [],
+    logFilter: 'all',
+    logSearch: '',
+    logFollow: true,
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const show = (id, on) => $(id).classList.toggle('hidden', !on);
+
+  function toast(message, kind = '') {
+    const el = $('toast');
+    el.textContent = message;
+    el.className = 'show ' + kind;
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { el.className = kind; }, 3200);
+  }
+
+  function setBusy(on, message) {
+    if (message) $('busyMsg').textContent = message;
+    $('busy').classList.toggle('hidden', !on);
+  }
+
+  async function api(path, options = {}) {
+    const opts = { method: options.method || 'GET', headers: {} };
+    if (options.body !== undefined) {
+      opts.headers['Content-Type'] = 'application/json';
+      opts.body = JSON.stringify(options.body);
+    }
+    try {
+      const res = await fetch(path, opts);
+      let data;
+      try { data = await res.json(); } catch { data = { success: false, error: 'Invalid server response' }; }
+      return data;
+    } catch (e) {
+      return { success: false, error: 'Network error: ' + (e && e.message ? e.message : String(e)) };
+    }
+  }
+
+  // ---------------------------------------------------------------- logging
+  const EMOJI_RUN = /^(?:[\u2190-\u21FF\u2300-\u23FF\u25A0-\u27BF\u2B00-\u2BFF\uFE0F\u200D\u20E3]|[\uD83C-\uDBFF][\uDC00-\uDFFF])+\s*/;
+  const DEFAULT_ICON = { info: '·', success: '✔', warning: '!', error: '✕' };
+  const TAG_CLASSES = [[/^exam/i, ' exam'], [/^(tp|ss)\b/i, ' training'], [/^clan/i, ' war']];
+  const LOG_MAX_ENTRIES = 1500;
+  const LOG_MAX_RENDER = 800;
+  const LOG_TRUNCATE = 280;
+  let logErrCount = 0;
+  let logWarnCount = 0;
+
+  function tagClassFor(tag) {
+    for (const [re, cls] of TAG_CLASSES) if (re.test(tag)) return cls;
+    return '';
+  }
+
+  // Promote a raw log to a severity level using its marker/emoji and wording.
+  function classifyLevel(fallback, icon, body) {
+    if (icon === '❌' || icon === '🔴' || icon === '🛑') return 'error';
+    if (icon === '✅' || icon === '🏆') return 'success';
+    if (icon === '⚠️' || icon === '🟡' || icon === '🟠' || icon === '⏸') return 'warning';
+    const text = icon + ' ' + body;
+    if (/(^|\s)(error|failed|failure|invalid|rejected|not accepted|locked|stagnant|timed out)\b/i.test(text)) return 'error';
+    if (/\b(warn|warning|retry|retrying|cooldown|throttl|resting|backoff|stopped)\b/i.test(text)) return 'warning';
+    if (/\b(success|completed|done|promoted|claimed)\b/i.test(text)) return 'success';
+    if (fallback === 'error' || fallback === 'warning' || fallback === 'success') return fallback;
+    return 'info';
+  }
+
+  // [tag] + leading emoji + body -> structured parts.
+  function parseLog(entry) {
+    const raw = entry && entry.message != null ? String(entry.message) : '';
+    let rest = raw.trim();
+    let tag = '';
+    const m = rest.match(/^\[([^\]]+)\]\s*/);
+    if (m) { tag = m[1]; rest = rest.slice(m[0].length); }
+    let icon = '';
+    const e = rest.match(EMOJI_RUN);
+    if (e) { icon = e[0].trim(); rest = rest.slice(e[0].length); }
+    const body = rest.trim();
+    const isCycle = icon === '▶' || body.startsWith('▶');
+    return {
+      timestamp: (entry && entry.timestamp) || '',
+      tag, icon, body,
+      kind: isCycle ? 'cycle' : 'line',
+      level: isCycle ? 'cycle' : classifyLevel(entry && entry.type, icon, body),
+    };
+  }
+
+  function buildLogNode(p) {
+    if (p.kind === 'cycle') {
+      const band = document.createElement('div');
+      band.className = 'log-line cycle';
+      band.dataset.level = 'cycle';
+      if (p.timestamp) {
+        const ts = document.createElement('span');
+        ts.className = 'ts';
+        ts.textContent = p.timestamp + '  ';
+        band.appendChild(ts);
+      }
+      if (p.tag) {
+        const t = document.createElement('span');
+        t.className = 'log-tag';
+        t.textContent = p.tag;
+        band.appendChild(t);
+      }
+      band.appendChild(document.createTextNode('▶ ' + p.body));
+      return band;
+    }
+
+    const line = document.createElement('div');
+    line.className = 'log-line ' + p.level;
+    line.dataset.level = p.level;
+
+    const ts = document.createElement('span');
+    ts.className = 'ts';
+    ts.textContent = p.timestamp;
+
+    const ico = document.createElement('span');
+    ico.className = 'log-ico';
+    ico.textContent = p.icon || DEFAULT_ICON[p.level] || '';
+
+    const msg = document.createElement('span');
+    msg.className = 'log-msg';
+
+    const segs = p.body.indexOf(' | ') >= 0
+      ? p.body.split(' | ').map((s) => s.trim()).filter((s) => s !== '')
+      : [];
+    const useChips = segs.length > 1 && segs.length <= 12 && segs.every((s) => s.length <= 160);
+
+    const paint = (expanded) => {
+      while (msg.firstChild) msg.removeChild(msg.firstChild);
+      if (p.tag) {
+        const t = document.createElement('span');
+        t.className = 'log-tag' + tagClassFor(p.tag);
+        t.textContent = p.tag;
+        msg.appendChild(t);
+      }
+      if (useChips) {
+        segs.forEach((seg) => {
+          const chip = document.createElement('span');
+          chip.className = 'log-seg';
+          chip.textContent = seg;
+          msg.appendChild(chip);
+        });
+      } else {
+        const text = !expanded && p.body.length > LOG_TRUNCATE ? p.body.slice(0, LOG_TRUNCATE) + ' …' : p.body;
+        msg.appendChild(document.createTextNode(text));
+      }
+    };
+    paint(false);
+
+    line.append(ts, ico, msg);
+
+    if (!useChips && p.body.length > LOG_TRUNCATE) {
+      let expanded = false;
+      line.style.cursor = 'pointer';
+      line.title = 'Click to expand / collapse';
+      line.addEventListener('click', () => { expanded = !expanded; paint(expanded); });
+    }
+    return line;
+  }
+
+  function logMatches(p) {
+    const f = state.logFilter || 'all';
+    if (f === 'cycle') { if (p.kind !== 'cycle') return false; }
+    else if (f !== 'all' && p.level !== f) return false;
+    if (state.logSearch) {
+      const hay = (p.tag + ' ' + p.icon + ' ' + p.body).toLowerCase();
+      if (!hay.includes(state.logSearch)) return false;
+    }
+    return true;
+  }
+
+  function appendLogNode(p) {
+    const log = $('log');
+    log.appendChild(buildLogNode(p));
+    while (log.childElementCount > LOG_MAX_RENDER) log.removeChild(log.firstChild);
+  }
+
+  function scrollLogBottom() {
+    const log = $('log');
+    state.logFollow = true;
+    $('logFollowBtn').classList.add('active');
+    $('logJumpBtn').classList.add('hidden');
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function updateLogCounts() {
+    const el = $('logCounts');
+    if (!el) return;
+    el.innerHTML = '<span class="err">' + logErrCount + '</span> errors · '
+      + '<span class="warn">' + logWarnCount + '</span> warnings · '
+      + state.logEntries.length + ' lines';
+  }
+
+  function appendLog(entry) {
+    const p = parseLog(entry);
+    state.logEntries.push(p);
+    if (state.logEntries.length > LOG_MAX_ENTRIES) state.logEntries.shift();
+    if (p.level === 'error') logErrCount++;
+    else if (p.level === 'warning') logWarnCount++;
+    if (logMatches(p)) appendLogNode(p);
+    updateLogCounts();
+    if (state.logFollow !== false) scrollLogBottom();
+  }
+
+  function renderLogAll() {
+    const log = $('log');
+    log.innerHTML = '';
+    const matches = state.logEntries.filter(logMatches).slice(-LOG_MAX_RENDER);
+    const frag = document.createDocumentFragment();
+    matches.forEach((p) => frag.appendChild(buildLogNode(p)));
+    log.appendChild(frag);
+    if (state.logFollow !== false) scrollLogBottom();
+  }
+
+  function clearLogView() {
+    state.logEntries = [];
+    logErrCount = 0;
+    logWarnCount = 0;
+    const log = $('log');
+    if (log) log.innerHTML = '';
+    updateLogCounts();
+  }
+
+  // ---------------------------------------------------------------- views
+  function showLogin() {
+    state.userId = null;
+    state.character = null;
+    state.characters = [];
+    show('loginView', true);
+    show('loginDiscordWrap', true);
+    show('charView', false);
+    show('dashView', false);
+    show('logCard', false);
+    setConn(false, 'offline');
+    if (state.ws) { try { state.ws.close(); } catch {} state.ws = null; }
+  }
+
+  function showDashboard() {
+    show('loginView', false);
+    show('loginDiscordWrap', false);
+    show('charView', false);
+    show('dashView', true);
+    show('logCard', true);
+  }
+
+  function showCharacterSelection(chars) {
+    state.characters = chars || state.characters || [];
+    renderCharacterList(state.characters);
+    show('loginView', false);
+    show('loginDiscordWrap', false);
+    show('charView', true);
+    show('dashView', false);
+    show('logCard', false);
+  }
+
+  function rankTierClass(rank) {
+    if (rank === null || rank === undefined || Number.isNaN(rank)) return '';
+    if (rank >= 8) return ' rank-tutor';
+    if (rank >= 6) return ' rank-special';
+    if (rank >= 4) return ' rank-jounin';
+    if (rank >= 2) return ' rank-chunin';
+    return ' rank-genin';
+  }
+
+  function renderRank(char) {
+    const rankRaw = char.rank;
+    const rank = (rankRaw === null || rankRaw === undefined || rankRaw === '') ? null : Number(rankRaw);
+    $('statRank').textContent = char.rank_name || (rank === null ? '—' : 'Rank ' + rank);
+    const note = $('statRankNote');
+    const cap = char.rank_level_cap;
+    const exam = char.rank_next_exam;
+    let text = '';
+    let warn = false;
+    if (cap !== null && cap !== undefined) {
+      if (exam && Number(char.level) >= Number(cap)) {
+        text = 'At cap (Lv ' + cap + ') — ' + exam + ' required';
+        warn = true;
+      } else {
+        text = 'Level cap ' + cap + (exam ? ' · ' + exam + ' at Lv ' + cap : '');
+      }
+    }
+    note.textContent = text;
+    note.classList.toggle('warn', warn);
+    $('statRankCard').className = 'stat wide' + rankTierClass(rank);
+  }
+
+  function setCharacter(char) {
+    state.character = char;
+    if (!char) return;
+    $('charAvatar').textContent = (char.name || 'N').trim().charAt(0).toUpperCase() || 'N';
+    $('charName').textContent = char.name || '—';
+    $('statLevel').textContent = char.level ?? '—';
+    $('statXp').textContent = formatNum(char.xp);
+    $('statGold').textContent = formatNum(char.gold);
+    $('statTokens').textContent = char.tokens == null ? '—' : formatNum(char.tokens);
+    const typeBadge = $('charType');
+    typeBadge.textContent = char.account_type || 'Ninja';
+    typeBadge.className = 'badge' + (char.account_type === 'Premium' ? ' premium' : '');
+    renderRank(char);
+  }
+
+  function setRunning(running, action) {
+    state.running = !!running;
+    state.currentAction = action || null;
+    const badge = $('charState');
+    badge.textContent = running ? (action || 'Running') : 'Idle';
+    badge.className = 'badge' + (running ? ' running' : '');
+    document.querySelectorAll('.act').forEach((b) => { b.disabled = running; });
+    $('stopBtn').disabled = !running;
+    $('clanStart').disabled = running;
+  }
+
+  function formatNum(v) {
+    if (v === null || v === undefined || v === '') return '—';
+    const n = Number(v);
+    if (Number.isNaN(n)) return String(v);
+    return n.toLocaleString('en-US');
+  }
+
+  function setConn(online, text) {
+    $('wsDot').classList.toggle('on', online);
+    $('wsText').textContent = text;
+  }
+
+  // ---------------------------------------------------------------- websocket
+  function connectWS(userId) {
+    if (state.ws) { try { state.ws.close(); } catch {} state.ws = null; }
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${proto}://${location.host}/ws/${encodeURIComponent(userId)}`);
+    state.ws = ws;
+    ws.onopen = () => setConn(true, 'connected');
+    ws.onclose = () => { setConn(false, 'offline'); };
+    ws.onerror = () => { setConn(false, 'offline'); };
+    ws.onmessage = (evt) => {
+      let msg;
+      try { msg = JSON.parse(evt.data); } catch { return; }
+      if (msg.type === 'ping') return;
+      if (msg.type === 'log') { appendLog(msg.data || {}); return; }
+      if (msg.type === 'battle_log') { appendLog({ timestamp: (msg.data || {}).timestamp, message: (msg.data || {}).message, type: 'info' }); return; }
+      if (msg.type === 'status') {
+        const d = msg.data || {};
+        setRunning(d.running, d.action);
+        if (d.action === 'Clan War') refreshClanState();
+        return;
+      }
+      if (msg.type === 'character_update') { setCharacter(msg.character); return; }
+    };
+  }
+
+  // ---------------------------------------------------------------- login flow
+  async function doLogin(username, password) {
+    setBusy(true, 'Logging in…');
+    try {
+      const data = await api('/api/login', { method: 'POST', body: { username, password } });
+      if (!data.success) { toast(data.error || data.message || 'Login failed', 'error'); return; }
+      state.userId = data.user_id;
+      state.username = data.username;
+      try { localStorage.setItem('ns_user_id', data.user_id); } catch {}
+      const chars = data.characters || [];
+      if (chars.length) {
+        showCharacterSelection(chars);
+      } else {
+        toast('No characters found on this account', 'error');
+      }
+      if (data.user_id) connectWS(data.user_id);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function renderCharacterList(chars) {
+    const list = $('charList');
+    list.innerHTML = '';
+    chars.forEach((c, index) => {
+      const item = document.createElement('div');
+      item.className = 'char-item';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = '<div class="avatar" style="width:40px;height:40px;font-size:17px;">' +
+        String(c.character_name || 'N').charAt(0).toUpperCase() + '</div>' +
+        '<div><div style="font-weight:700;">' + escapeHtml(c.character_name || 'Unknown') + '</div>' +
+        '<div class="hint">Lv ' + (c.character_level ?? '?') + ' · ID ' + escapeHtml(String(c.character_id ?? '')) + '</div></div>';
+      const btn = document.createElement('button');
+      btn.className = 'btn primary sm';
+      btn.textContent = 'Select';
+      btn.onclick = () => selectCharacter(index, chars);
+      item.appendChild(meta);
+      item.appendChild(btn);
+      list.appendChild(item);
+    });
+  }
+
+  async function selectCharacter(index, chars) {
+    if (chars && chars.length) state.characters = chars;
+    setBusy(true, 'Loading character data…');
+    try {
+      const data = await api('/api/select_character', { method: 'POST', body: { user_id: state.userId, character_index: index } });
+      if (!data.success) { toast(data.error || 'Failed to select character', 'error'); return; }
+      setCharacter(data.character);
+      showDashboard();
+      if (!state.ws || state.ws.readyState > 1) connectWS(state.userId);
+      loadSettings();
+      refreshStatus();
+      loadClanSettings();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function refreshStatus() {
+    if (!state.userId) return;
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/status');
+    if (!data.success) return;
+    if (data.character) setCharacter(data.character);
+    setRunning(data.running, data.current_action);
+  }
+
+  // ---------------------------------------------------------------- actions
+  async function startAction(action, params) {
+    if (!state.userId) return;
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/action', {
+      method: 'POST', body: { action, params: params || {} },
+    });
+    if (!data.success) { toast(data.error || 'Failed to start action', 'error'); return; }
+    toast(data.message || 'Action started', 'success');
+    setRunning(true, action);
+  }
+
+  async function stopAction() {
+    if (!state.userId) return;
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/stop', { method: 'POST' });
+    if (!data.success) { toast(data.error || 'Nothing to stop', 'error'); return; }
+    toast(data.message || 'Stopping...', 'success');
+  }
+
+  async function logout() {
+    if (state.userId) await api('/api/user/' + encodeURIComponent(state.userId) + '/logout', { method: 'POST' });
+    try { localStorage.removeItem('ns_user_id'); } catch {}
+    showLogin();
+    checkQuickLogin();
+  }
+
+  // ---------------------------------------------------------------- settings
+  function fillSelect(id, options, selected) {
+    const sel = $(id);
+    sel.innerHTML = '';
+    for (const [value, label] of Object.entries(options)) {
+      const opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = label;
+      if (value === selected) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  async function loadSettings() {
+    const data = await api('/api/settings/ninjasaga');
+    if (!data.success) return;
+    const adp = data.anti_detection_profile || {};
+    for (const field of ADP_FIELDS) {
+      const el = $('adp_' + field);
+      if (el) el.value = adp[field] ?? '';
+    }
+    const steps = adp.cloudflare_backoff_steps_seconds;
+    $('adp_cloudflare_backoff_steps_seconds').value = Array.isArray(steps) ? steps.join(',') : '';
+    const asp = data.auto_spend_profile || {};
+    $('asp_enabled').checked = !!asp.enabled;
+    $('asp_max_refills_per_run').value = asp.max_refills_per_run ?? 1;
+    const erp = data.event_resource_policy || {};
+    $('erp_mode').value = erp.mode || 'wait';
+    $('erp_wait_minutes').value = erp.wait_minutes ?? 30;
+    const et = data.event_timing || {};
+    $('et_sakura_battle_delay_seconds').value = et.sakura_battle_delay_seconds ?? 20;
+    $('et_pumpkin_battle_delay_seconds').value = et.pumpkin_battle_delay_seconds ?? 20;
+    $('special_jounin_class_index').value = String(data.special_jounin_class_index ?? 3);
+    $('tp_training_abuse_loop').value = data.tp_training_abuse_loop ?? 1;
+    $('ss_training_abuse_loop').value = data.ss_training_abuse_loop ?? 1;
+    $('exam_mode').value = data.exam_mode || 'hard';
+    $('debug_enabled').checked = !!data.debug_enabled;
+  }
+
+  async function saveSettings() {
+    const anti = {};
+    for (const field of ADP_FIELDS) {
+      const el = $('adp_' + field);
+      if (el) anti[field] = Number(el.value);
+    }
+    anti.cloudflare_backoff_steps_seconds = $('adp_cloudflare_backoff_steps_seconds').value.trim();
+    const body = {
+      anti_detection_profile: anti,
+      auto_spend_profile: {
+        enabled: $('asp_enabled').checked,
+        max_refills_per_run: Number($('asp_max_refills_per_run').value),
+      },
+      event_resource_policy: { mode: $('erp_mode').value, wait_minutes: Number($('erp_wait_minutes').value) },
+      event_timing: {
+        sakura_battle_delay_seconds: Number($('et_sakura_battle_delay_seconds').value),
+        pumpkin_battle_delay_seconds: Number($('et_pumpkin_battle_delay_seconds').value),
+      },
+      special_jounin_class_index: Number($('special_jounin_class_index').value),
+      tp_training_abuse_loop: Number($('tp_training_abuse_loop').value),
+      ss_training_abuse_loop: Number($('ss_training_abuse_loop').value),
+    };
+    const data = await api('/api/settings/ninjasaga', { method: 'POST', body });
+    if (!data.success) { toast('Failed to save settings', 'error'); return; }
+    await api('/api/debug/ninjasaga', { method: 'POST', body: { enabled: $('debug_enabled').checked } });
+    toast('Settings saved', 'success');
+    loadSettings();
+  }
+
+  async function resetSettings() {
+    await api('/api/settings/ninjasaga', { method: 'POST', body: { reset_defaults: true } });
+    await api('/api/debug/ninjasaga', { method: 'POST', body: { enabled: false } });
+    toast('Defaults restored', 'success');
+    loadSettings();
+  }
+
+  // ---------------------------------------------------------------- clan war
+  function applyClanState(data) {
+    if (!data) return;
+    if (data.settings) state.clan.settings = data.settings;
+    if (data.snapshot) state.clan.snapshot = data.snapshot;
+    const s = state.clan.settings || {};
+    $('clanTargetId').value = s.target_clan_id || '';
+    $('clanTargetName').value = s.target_clan_name || '';
+    $('clanRefillSource').value = s.stamina_refill_source || 'auto';
+    $('clanAutoSpend').checked = !!s.auto_spend_token;
+    $('clanBleeding').checked = !!s.bleeding_mode;
+    $('clanManualRecruit').checked = !!s.manual_recruit;
+    $('clanManualIds').value = Array.isArray(s.manual_member_ids) ? s.manual_member_ids.join(',') : '';
+    const delays = s.settings || {};
+    $('cw_battle_delay_seconds').value = delays.battle_delay_seconds ?? 8;
+    $('cw_refresh_delay_seconds').value = delays.refresh_delay_seconds ?? 30;
+    $('cw_buy_stamina_delay_seconds').value = delays.buy_stamina_delay_seconds ?? 3;
+    $('cw_amf_call_delay_seconds').value = delays.amf_call_delay_seconds ?? 2;
+    $('cw_post_captcha_resume_delay_seconds').value = delays.post_captcha_resume_delay_seconds ?? 4;
+    renderClanStatus(data);
+    const cap = $('clanCaptcha');
+    if (data.captcha_required) {
+      cap.classList.remove('hidden');
+      $('clanCaptchaMsg').textContent = data.captcha_message || 'Solve the captcha in-game, then resume.';
+    } else {
+      cap.classList.add('hidden');
+    }
+  }
+
+  function renderClanStatus(data) {
+    const snap = data.snapshot;
+    if (!snap) { $('clanStatus').textContent = state.clan.snapshot ? 'War list loaded.' : 'No war list loaded yet.'; }
+    if (snap) {
+      const clan = snap.clan || {};
+      const ch = snap.char || {};
+      $('clanStatus').textContent = `Clan: ${clan.name || '—'} (${clan.id || '—'}) · Rep ${clan.reputation ?? 0} · Stamina ${ch.stamina ?? 0}/${ch.max_stamina ?? 0}`;
+    }
+    renderClanTable();
+  }
+
+  function renderClanTable() {
+    const body = $('clanTableBody');
+    const filter = ($('clanSearch').value || '').toLowerCase();
+    const list = (state.clan.snapshot && state.clan.snapshot.war_list) || [];
+    const rows = list.filter((c) => !filter || String(c.name).toLowerCase().includes(filter) || String(c.id).toLowerCase().includes(filter));
+    if (!rows.length) { body.innerHTML = '<tr><td colspan="5" class="hint">No clans.</td></tr>'; return; }
+    body.innerHTML = '';
+    for (const c of rows) {
+      const tr = document.createElement('tr');
+      tr.className = 'clan-pick' + (String(c.id) === String(state.clan.selectedId) ? ' sel' : '');
+      tr.innerHTML = `<td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.id)}</td><td>${escapeHtml(String(c.reputation ?? ''))}</td>` +
+        `<td>${escapeHtml(c.master || '-')}</td><td>${escapeHtml(String(c.members ?? '?'))}</td>`;
+      tr.onclick = () => {
+        state.clan.selectedId = c.id;
+        $('clanTargetId').value = c.id;
+        $('clanTargetName').value = c.name;
+        renderClanTable();
+      };
+      body.appendChild(tr);
+    }
+  }
+
+  async function loadClanSettings() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war');
+    if (data.success) applyClanState(data);
+  }
+
+  async function refreshClanState() {
+    if (!state.userId) return;
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war');
+    if (data.success) applyClanState(data);
+  }
+
+  async function clanOpen() {
+    const btn = $('clanOpenBtn');
+    btn.disabled = true; btn.textContent = 'Loading...';
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/open', { method: 'POST' });
+    btn.disabled = false; btn.textContent = 'Reload War List';
+    if (!data.success) { toast(data.error || 'Failed to load war list', 'error'); return; }
+    applyClanState(data);
+    toast('War list loaded', 'success');
+  }
+
+  function clanConfigBody() {
+    return {
+      target_clan_id: $('clanTargetId').value.trim(),
+      target_clan_name: $('clanTargetName').value.trim(),
+      stamina_refill_source: $('clanRefillSource').value,
+      auto_spend_token: $('clanAutoSpend').checked,
+      bleeding_mode: $('clanBleeding').checked,
+      manual_recruit: $('clanManualRecruit').checked,
+      manual_member_ids: $('clanManualIds').value.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 2),
+      settings: {
+        battle_delay_seconds: Number($('cw_battle_delay_seconds').value),
+        refresh_delay_seconds: Number($('cw_refresh_delay_seconds').value),
+        buy_stamina_delay_seconds: Number($('cw_buy_stamina_delay_seconds').value),
+        amf_call_delay_seconds: Number($('cw_amf_call_delay_seconds').value),
+        post_captcha_resume_delay_seconds: Number($('cw_post_captcha_resume_delay_seconds').value),
+      },
+    };
+  }
+
+  async function clanSave() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/config', { method: 'POST', body: clanConfigBody() });
+    if (!data.success) { toast(data.error || 'Failed to save clan war config', 'error'); return; }
+    applyClanState(data);
+    toast('Clan War config saved', 'success');
+  }
+
+  async function clanStart() {
+    await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/config', { method: 'POST', body: clanConfigBody() });
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/start', { method: 'POST' });
+    if (!data.success) { toast(data.error || 'Failed to start Clan War', 'error'); return; }
+    applyClanState(data);
+    toast('Clan War started', 'success');
+  }
+
+  async function clanStop() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/stop', { method: 'POST' });
+    if (!data.success) { toast(data.error || 'Clan War is not running', 'error'); return; }
+    applyClanState(data);
+    toast('Stopping Clan War...', 'success');
+  }
+
+  async function clanCaptchaResume() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/captcha_resume', { method: 'POST' });
+    if (!data.success) { toast(data.error || 'Not waiting for captcha', 'error'); return; }
+    applyClanState(data);
+    toast('Resuming Clan War...', 'success');
+  }
+
+  async function clanCaptchaChallenge() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/captcha_challenge', { method: 'POST' });
+    if (!data.success) { toast(data.error || 'Failed to load captcha puzzle', 'error'); return; }
+    applyClanState(data);
+    const ch = data.challenge || {};
+    $('captchaId').value = ch.id || ch.challenge_id || '';
+    $('clanCaptchaChallengeBox').classList.remove('hidden');
+    toast('Puzzle loaded', 'success');
+  }
+
+  async function clanCaptchaVerify() {
+    const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/clan_war/captcha_verify', {
+      method: 'POST',
+      body: {
+        challenge_id: $('captchaId').value.trim(),
+        answer: $('captchaAnswer').value.trim(),
+        hmac: $('captchaHmac').value.trim(),
+      },
+    });
+    if (!data.success) { toast(data.message || data.error || 'Captcha verify failed', 'error'); return; }
+    applyClanState(data);
+    toast('Captcha solved', 'success');
+  }
+
+  function openClanModal() {
+    $('clanModal').classList.remove('hidden');
+    loadClanSettings();
+    state.clanPollTimer = setInterval(refreshClanState, 3000);
+  }
+
+  function closeClanModal() {
+    $('clanModal').classList.add('hidden');
+    if (state.clanPollTimer) { clearInterval(state.clanPollTimer); state.clanPollTimer = null; }
+  }
+
+  // ---------------------------------------------------------------- quick login
+  async function checkQuickLogin() {
+    let userId = null;
+    try { userId = localStorage.getItem('ns_user_id'); } catch {}
+    if (!userId) { show('quickLoginWrap', false); return; }
+    const data = await api('/api/quick_login', { method: 'POST', body: { user_id: userId, check_only: true } });
+    state.rememberedUserId = data.available ? userId : null;
+    show('quickLoginWrap', !!data.available);
+  }
+
+  async function doQuickLogin() {
+    if (!state.rememberedUserId) return;
+    setBusy(true, 'Quick login…');
+    try {
+      const data = await api('/api/quick_login', { method: 'POST', body: { user_id: state.rememberedUserId } });
+      if (!data.success) { toast(data.error || 'Quick login failed', 'error'); return; }
+      state.userId = data.user_id;
+      state.username = data.username;
+      try { localStorage.setItem('ns_user_id', data.user_id); } catch {}
+      const chars = data.characters || [];
+      if (chars.length) showCharacterSelection(chars);
+      else toast('No characters found on this account', 'error');
+      if (data.user_id) connectWS(data.user_id);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // ---------------------------------------------------------------- init
+  function init() {
+    fillSelect('sakuraEnemy', SAKURA_ENEMIES, 'enemy289');
+    fillSelect('pumpkinEnemy', PUMPKIN_ENEMIES, 'enemy536');
+
+    $('loginBtn').onclick = () => doLogin($('username').value.trim(), $('password').value);
+    $('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('loginBtn').click(); });
+    $('quickLoginBtn').onclick = doQuickLogin;
+
+    $('refreshBtn').onclick = async () => {
+      const data = await api('/api/user/' + encodeURIComponent(state.userId) + '/action', { method: 'POST', body: { action: 'refresh' } });
+      if (!data.success) { toast(data.error || 'Refresh failed', 'error'); return; }
+      toast('Refreshing...', 'success');
+    };
+    $('logoutBtn').onclick = logout;
+    $('switchCharBtn').onclick = () => { if (state.characters && state.characters.length) showCharacterSelection(state.characters); };
+    $('stopBtn').onclick = stopAction;
+    $('clearLogsBtn').onclick = async () => {
+      clearLogView();
+      await api('/api/user/' + encodeURIComponent(state.userId) + '/clear_logs', { method: 'POST' });
+    };
+    $('logSearch').oninput = () => {
+      state.logSearch = $('logSearch').value.trim().toLowerCase();
+      renderLogAll();
+    };
+    document.querySelectorAll('#logFilters .seg-btn').forEach((b) => {
+      b.onclick = () => {
+        document.querySelectorAll('#logFilters .seg-btn').forEach((x) => x.classList.toggle('active', x === b));
+        state.logFilter = b.dataset.filter;
+        renderLogAll();
+      };
+    });
+    $('logFollowBtn').onclick = scrollLogBottom;
+    $('logJumpBtn').onclick = scrollLogBottom;
+    $('log').addEventListener('scroll', () => {
+      const log = $('log');
+      const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 24;
+      state.logFollow = atBottom;
+      $('logFollowBtn').classList.toggle('active', atBottom);
+      $('logJumpBtn').classList.toggle('hidden', atBottom);
+    });
+
+    document.querySelectorAll('.action-tile.act, .btn.act').forEach((btn) => {
+      btn.onclick = () => {
+        const action = btn.dataset.action;
+        let params = {};
+        if (btn.dataset.param) {
+          const sel = $(btn.dataset.param);
+          params = { enemy_id: sel.value, enemy_name: sel.options[sel.selectedIndex].textContent };
+        }
+        startAction(action, params);
+      };
+    });
+
+    $('settingsToggle').onclick = () => { state.settingsOpen = !state.settingsOpen; show('settingsView', state.settingsOpen); };
+    $('settingsClose').onclick = () => { state.settingsOpen = false; show('settingsView', false); };
+    $('saveSettings').onclick = saveSettings;
+    $('resetSettings').onclick = resetSettings;
+
+    $('clanWarBtn').onclick = openClanModal;
+    $('clanClose').onclick = closeClanModal;
+    $('clanOpenBtn').onclick = clanOpen;
+    $('clanSearch').oninput = renderClanTable;
+    $('clanSave').onclick = clanSave;
+    $('clanStart').onclick = clanStart;
+    $('clanStop').onclick = clanStop;
+    $('clanCaptchaResume').onclick = clanCaptchaResume;
+    $('clanCaptchaChallenge').onclick = clanCaptchaChallenge;
+    $('clanCaptchaVerify').onclick = clanCaptchaVerify;
+
+    showLogin();
+    checkQuickLogin();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
